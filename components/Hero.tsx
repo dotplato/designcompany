@@ -1,19 +1,40 @@
-import React from "react";
+import { getSiteSettings } from "@/lib/contentful.queries";
 import { Button } from "./ui/Button";
 import { Section } from "./ui/Section";
 
-export function Hero() {
+export async function Hero() {
+  const siteSettings = await getSiteSettings();
+  const backgroundVideoUrl = siteSettings?.heroBackgroundVideo;
+
   return (
-    <Section className="flex items-center justify-center pt-32 pb-12 px-6 lg:px-8 relative">
-      <div className="max-w-2xl mx-auto text-center">
+    <Section className="flex items-center justify-center pt-32 pb-48 px-6 lg:px-8 relative overflow-hidden min-h-[70vh]">
+      {/* Background Video */}
+      {backgroundVideoUrl && (
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover opacity-100"
+          >
+            <source src={backgroundVideoUrl} type="video/mp4" />
+          </video>
+          {/* Subtle gradients to only fade the very top and bottom edges */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background/50" />
+          <div className="absolute inset-0 bg-black/5" />
+        </div>
+      )}
+
+      <div className="max-w-2xl mx-auto text-center relative z-10">
         {/* Main Headline */}
-        <h1 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground mb-4 leading-normal tracking-tight animate-fade-in">
+        <h1 className="text-lg sm:text-xl lg:text-3xl font-bold text-foreground mb-6 leading-tight tracking-tight animate-fade-in">
           Design, build &amp; ship interfaces that accelerate products
         </h1>
 
         {/* Subtitle */}
         <p
-          className="text-xs sm:text-[11px] lg:text-xs text-muted mb-8 max-w-lg mx-auto leading-relaxed animate-fade-in"
+          className="text-sm sm:text-[13px] lg:text-base text-muted mb-10 max-w-lg mx-auto leading-relaxed animate-fade-in"
           style={{ animationDelay: "0.1s" }}
         >
           Clear your design roadmap, activate users and design experiences that
@@ -29,7 +50,7 @@ export function Hero() {
             variant="primary"
             size="sm"
             href="#contact"
-            className="rounded-full px-8 text-[10px]"
+            className="rounded-full px-8 py-3 text-[11px] font-bold tracking-wide"
           >
             Schedule a call
           </Button>

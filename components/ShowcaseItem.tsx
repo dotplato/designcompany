@@ -3,8 +3,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "./ui/Button";
 import Image from "next/image";
-import { urlFor, getVideoUrl } from "@/lib/sanity.client";
-import { PortableText } from "@portabletext/react";
+import { getImageUrl, getImageAlt } from "@/lib/contentful.client";
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
 interface ShowcaseItemProps {
   project: any;
@@ -62,7 +62,14 @@ export function ShowcaseItem({ project, isFirst, index }: ShowcaseItemProps) {
         ? [project.category]
         : [];
 
-  const uploadedVideoUrl = getVideoUrl(project.video?.asset);
+  // videoUrl is a plain string in Contentful (YouTube, Vimeo, or direct mp4)
+  const uploadedVideoUrl = project.videoUrl && (
+    !project.videoUrl.includes("youtube.com") &&
+    !project.videoUrl.includes("youtu.be") &&
+    !project.videoUrl.includes("vimeo.com")
+      ? project.videoUrl
+      : null
+  );
 
   return (
     <div ref={sectionRef}>
@@ -84,9 +91,13 @@ export function ShowcaseItem({ project, isFirst, index }: ShowcaseItemProps) {
               <h2 className="text-xl lg:text-2xl font-bold text-foreground mb-4">
                 {project.title}
               </h2>
-              <p className="text-[11px] lg:text-xs text-foreground mb-8 leading-relaxed">
-                {project.description || project.shortDescription || ""}
-              </p>
+              <div className="text-[11px] lg:text-xs text-foreground mb-8 leading-relaxed">
+                {typeof project.description === 'object' ? (
+                  documentToReactComponents(project.description)
+                ) : (
+                  <p>{project.description || project.shortDescription || ""}</p>
+                )}
+              </div>
 
               {tags.length > 0 && (
                 <div className="space-y-4 mb-12">
@@ -166,11 +177,8 @@ export function ShowcaseItem({ project, isFirst, index }: ShowcaseItemProps) {
                   )
                 ) : project.mainImage ? (
                   <Image
-                    src={urlFor(project.mainImage)
-                      .width(1200)
-                      .height(900)
-                      .url()}
-                    alt={project.mainImage.alt || project.title}
+                    src={getImageUrl(project.mainImage, 1200, 900)}
+                    alt={getImageAlt(project.mainImage, project.title)}
                     fill
                     className="object-cover"
                     sizes="100vw"
@@ -203,8 +211,8 @@ export function ShowcaseItem({ project, isFirst, index }: ShowcaseItemProps) {
                       className="relative aspect-[4/3] bg-zinc-50 rounded-lg overflow-hidden border border-border/30 group/img"
                     >
                       <Image
-                        src={urlFor(image).width(1200).height(900).url()}
-                        alt={image.alt || `${project.title} detail ${idx + 1}`}
+                        src={getImageUrl(image, 1200, 900)}
+                        alt={getImageAlt(image, `${project.title} detail ${idx + 1}`)}
                         fill
                         className="object-cover transition-transform duration-700 group-hover/img:scale-105"
                         sizes="100vw"
@@ -215,11 +223,18 @@ export function ShowcaseItem({ project, isFirst, index }: ShowcaseItemProps) {
                 </div>
               )}
 
+
+
               {/* Rich Text Content at the End */}
               {project.content && (
                 <div className="pt-8 border-t border-border/30 px-4 sm:px-6 lg:px-8">
                   <div className="prose prose-sm lg:prose-base prose-zinc dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
-                    <PortableText value={project.content} />
+                    {/* Render Contentful Rich Text */}
+                    {typeof project.content === 'object' ? (
+                      documentToReactComponents(project.content)
+                    ) : (
+                      <p>{project.content}</p>
+                    )}
                   </div>
                 </div>
               )}

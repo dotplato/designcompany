@@ -1,10 +1,10 @@
 import React from "react";
 import { Section } from "./ui/Section";
-import { getPortfolioItems, getSiteSettings } from "@/lib/sanity.queries";
+import { getPortfolioItems, getSiteSettings } from "@/lib/contentful.queries";
 import { ShowcaseItem } from "./ShowcaseItem";
 
 export async function PortfolioShowcase() {
-  // Fetch portfolio items and site settings from Sanity
+  // Fetch portfolio items and site settings from Contentful
   const [portfolioItems, siteSettings] = await Promise.all([
     getPortfolioItems(),
     getSiteSettings(),
@@ -19,15 +19,15 @@ export async function PortfolioShowcase() {
             No portfolio items yet
           </h3>
           <p className="text-sm text-muted">
-            Create some portfolio items in Sanity Studio to see them here.
+            Add portfolio items in Contentful to see them here.
           </p>
           <a
-            href="http://localhost:3333"
+            href="https://app.contentful.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-4 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity text-sm"
           >
-            Open Sanity Studio
+            Open Contentful
           </a>
         </div>
       </Section>

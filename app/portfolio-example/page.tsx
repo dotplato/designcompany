@@ -1,11 +1,11 @@
-import { getPortfolioItems } from "@/lib/sanity.queries";
-import { urlFor } from "@/lib/sanity.client";
+import { getPortfolioItems } from "@/lib/contentful.queries";
+import { getImageUrl, getImageAlt } from "@/lib/contentful.client";
 import Image from "next/image";
 import Link from "next/link";
 
 /**
  * Example Portfolio Page Component
- * This demonstrates how to fetch and display Sanity data
+ * This demonstrates how to fetch and display Contentful data
  */
 export default async function PortfolioExamplePage() {
   // Fetch all portfolio items from Sanity
@@ -32,8 +32,8 @@ export default async function PortfolioExamplePage() {
               {item.mainImage && (
                 <div className="relative h-64 w-full overflow-hidden">
                   <Image
-                    src={urlFor(item.mainImage).width(600).height(400).url()}
-                    alt={item.mainImage.alt || item.title}
+                    src={getImageUrl(item.mainImage, 600, 400)}
+                    alt={getImageAlt(item.mainImage, item.title)}
                     width={600}
                     height={400}
                     className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
@@ -83,15 +83,15 @@ export default async function PortfolioExamplePage() {
       {portfolioItems.length === 0 && (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">
-            No portfolio items found. Create some in Sanity Studio!
+            No portfolio items found. Add some in Contentful!
           </p>
           <a
-            href="http://localhost:3333"
+            href="https://app.contentful.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Open Sanity Studio
+            Open Contentful
           </a>
         </div>
       )}
