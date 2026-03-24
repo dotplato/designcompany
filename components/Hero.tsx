@@ -7,7 +7,7 @@ export async function Hero() {
   const backgroundVideoUrl = siteSettings?.heroBackgroundVideo;
 
   return (
-    <Section className="flex items-center justify-center pt-32 pb-48 px-6 lg:px-8 relative overflow-hidden min-h-[70vh]">
+    <Section fullWidth className="flex flex-col pt-32 lg:pt-40 px-6 lg:px-8 relative overflow-hidden h-screen h-[100dvh]">
       {/* Background Video */}
       {backgroundVideoUrl && (
         <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
@@ -20,9 +20,6 @@ export async function Hero() {
           >
             <source src={backgroundVideoUrl} type="video/mp4" />
           </video>
-          {/* Subtle gradients to only fade the very top and bottom edges */}
-          <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background/50" />
-          <div className="absolute inset-0 bg-black/5" />
         </div>
       )}
 
