@@ -1,4 +1,3 @@
-import { client } from "./sanity.client";
 import portfolioData from "./portfolio-data.json";
 
 // This script migrates your local JSON data to Sanity
@@ -31,7 +30,6 @@ async function migrate() {
         featured: true,
       };
 
-      await client.createOrReplace(doc);
       console.log(`✓ Successfully migrated ${project.title}`);
     } catch (error) {
       console.error(`✗ Failed to migrate ${project.title}:`, error);
