@@ -10,7 +10,7 @@ export async function PortfolioShowcase() {
     getSiteSettings(),
   ]);
 
-  // If no Sanity data, show a message
+  // If no portfolio data, show a message
   if (!portfolioItems || portfolioItems.length === 0) {
     return (
       <Section className="py-24 lg:py-32">

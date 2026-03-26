@@ -34,28 +34,8 @@ function mapPortfolioEntry(entry: any) {
  * Fetch ALL portfolio items from Contentful, ordered by creation date desc.
  */
 export async function getPortfolioItems() {
-  if (!contentfulClient) {
-    console.warn(
-      "Contentful client not initialized, falling back to local JSON data"
-    );
-    const portfolioData = await import("./portfolio-data.json");
-    return portfolioData.showcaseProjects.map((p: any) => ({
-      _id: p.id,
-      title: p.title,
-      slug: { current: p.id },
-      category: p.category,
-      description: p.description,
-      client: p.client,
-      year: p.year,
-      featured: true,
-      tags: p.tags || [],
-      mainImage: null,
-      gallery: [],
-      videoUrl: p.videoUrl,
-      content: null,
-      images: p.images,
-    }));
-  }
+  if (!contentfulClient) return [];
+
 
   const response = await contentfulClient.getEntries({
     content_type: "portfolio",
